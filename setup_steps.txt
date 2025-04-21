@@ -1,0 +1,5 @@
+ln -s /teamspace/studios/this_studio/models/ECft_Character_240928a-000275.safetensors /teamspace/studios/this_studio/cog-comfyui/ComfyUI/models/unet/
+ln -s /teamspace/studios/this_studio/models/0lgaFLUX-241129-120_LoRAex.safetensors    /teamspace/studios/this_studio/cog-comfyui/ComfyUI/models/loras/
+
+ls /teamspace/studios/this_studio/cog-comfyui/ComfyUI/models/loras/
+ls /teamspace/studios/this_studio/cog-comfyui/ComfyUI/models/unet/

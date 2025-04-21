@@ -107,7 +107,7 @@ class WeightsManifest:
                 directory_name = directory_name.lower()
 
             dest_path = {
-                "unet": f"{MODELS_PATH}/diffusion_models",
+                "unet": f"{MODELS_PATH}/unet",
                 "clip": f"{MODELS_PATH}/text_encoders",
             }.get(directory_name, f"{MODELS_PATH}/{directory_name}")
 
