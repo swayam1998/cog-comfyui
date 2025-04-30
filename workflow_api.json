@@ -12,7 +12,7 @@
   },
   "6": {
     "inputs": {
-      "text": "EC$ style, a colorful digital illustration featuring a jumping strawberry character with yellow seeds and yellow limbs, on a lavender background. The character holds a vanilla soft-serve ice cream cone in one hand and flashes a peace with the other. The character has a playful facial expression, with round eyes, with long eyelashes, small pink lips. It has a big green leaf and stem on top of it's head. It wears blue sneakers with white laces, and white socks with pink stripes.",
+      "text": "ohwx woman with short blonde hair is a food influencer.\nShe is cooking a healthy meal in her bright brooklyn\napartment.",
       "clip": [
         "11",
         0
@@ -21,22 +21,6 @@
     "class_type": "CLIPTextEncode",
     "_meta": {
       "title": "CLIP Text Encode (Prompt)"
-    }
-  },
-  "8": {
-    "inputs": {
-      "samples": [
-        "13",
-        0
-      ],
-      "vae": [
-        "49",
-        0
-      ]
-    },
-    "class_type": "VAEDecode",
-    "_meta": {
-      "title": "VAE Decode"
     }
   },
   "11": {
@@ -51,100 +35,10 @@
       "title": "DualCLIPLoader"
     }
   },
-  "13": {
-    "inputs": {
-      "noise": [
-        "25",
-        0
-      ],
-      "guider": [
-        "22",
-        0
-      ],
-      "sampler": [
-        "16",
-        0
-      ],
-      "sigmas": [
-        "17",
-        0
-      ],
-      "latent_image": [
-        "5",
-        0
-      ]
-    },
-    "class_type": "SamplerCustomAdvanced",
-    "_meta": {
-      "title": "SamplerCustomAdvanced"
-    }
-  },
-  "16": {
-    "inputs": {
-      "sampler_name": "euler"
-    },
-    "class_type": "KSamplerSelect",
-    "_meta": {
-      "title": "KSamplerSelect"
-    }
-  },
-  "17": {
-    "inputs": {
-      "scheduler": "normal",
-      "steps": 30,
-      "denoise": 1,
-      "model": [
-        "39",
-        0
-      ]
-    },
-    "class_type": "BasicScheduler",
-    "_meta": {
-      "title": "BasicScheduler"
-    }
-  },
-  "22": {
-    "inputs": {
-      "model": [
-        "39",
-        0
-      ],
-      "conditioning": [
-        "58",
-        0
-      ]
-    },
-    "class_type": "BasicGuider",
-    "_meta": {
-      "title": "BasicGuider"
-    }
-  },
-  "25": {
-    "inputs": {
-      "noise_seed": 705885565360461
-    },
-    "class_type": "RandomNoise",
-    "_meta": {
-      "title": "RandomNoise"
-    }
-  },
-  "27": {
-    "inputs": {
-      "filename_prefix": "ComfyUI",
-      "images": [
-        "8",
-        0
-      ]
-    },
-    "class_type": "SaveImage",
-    "_meta": {
-      "title": "Save Image"
-    }
-  },
   "39": {
     "inputs": {
-      "unet_name": "ECft_Character_240928a-000275.safetensors",
-      "weight_dtype": "fp8_e4m3fn"
+      "unet_name": "flux1-dev.safetensors",
+      "weight_dtype": "default"
     },
     "class_type": "UNETLoader",
     "_meta": {
@@ -173,7 +67,85 @@
       "title": "CLIP Text Encode (Prompt)"
     }
   },
-  "58": {
+  "54": {
+    "inputs": {
+      "lora_name": "0lgaFLUX-241129-120_LoRAex.safetensors",
+      "strength_model": 1,
+      "strength_clip": 1,
+      "model": [
+        "39",
+        0
+      ],
+      "clip": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "Load LoRA"
+    }
+  },
+  "55": {
+    "inputs": {
+      "seed": 544734787968768,
+      "steps": 30,
+      "cfg": 1,
+      "sampler_name": "uni_pc",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "54",
+        0
+      ],
+      "positive": [
+        "59",
+        0
+      ],
+      "negative": [
+        "53",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "56": {
+    "inputs": {
+      "samples": [
+        "55",
+        0
+      ],
+      "vae": [
+        "49",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "57": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "56",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "59": {
     "inputs": {
       "guidance": 3.5,
       "conditioning": [

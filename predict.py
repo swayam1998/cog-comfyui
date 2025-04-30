@@ -66,28 +66,30 @@ class Predictor(BasePredictor):
         latent_image["width"] = kwargs["width"]
         latent_image["height"] = kwargs["height"]
         
-        # Update RandomNoise seed in node 25
-        noise = workflow["25"]["inputs"]
-        noise["noise_seed"] = kwargs["seed"]
+        # Update KSampler parameters in node 55
+        ksampler = workflow["55"]["inputs"]
+        ksampler["seed"] = kwargs["seed"]
+        ksampler["steps"] = kwargs["steps"]
+        ksampler["cfg"] = kwargs["cfg"]
+        ksampler["sampler_name"] = kwargs["sampler"]
+        ksampler["scheduler"] = kwargs["scheduler"]
+        ksampler["denoise"] = kwargs["denoise"]
         
-        # Update FluxGuidance in node 58
-        flux_guidance = workflow["58"]["inputs"]
+        # Update FluxGuidance in node 59
+        flux_guidance = workflow["59"]["inputs"]
         flux_guidance["guidance"] = kwargs["guidance"]
         
-        # Update sampler in node 16
-        sampler = workflow["16"]["inputs"]
-        sampler["sampler_name"] = kwargs["sampler"]
-        
-        # Update scheduler in node 17
-        scheduler = workflow["17"]["inputs"]
-        scheduler["steps"] = kwargs["steps"]
-        scheduler["scheduler"] = kwargs["scheduler"]
+        # Update LoRA strength if requested
+        if "lora_strength" in kwargs and "54" in workflow:
+            lora_loader = workflow["54"]["inputs"]
+            lora_loader["strength_model"] = kwargs["lora_strength"]
+            lora_loader["strength_clip"] = kwargs["lora_strength"]
 
     def predict(
         self,
         prompt: str = Input(
             description="Text prompt describing the image to generate",
-            default="EC$ style, a colorful digital illustration",
+            default="ohwx woman with short blonde hair is a food influencer. She is cooking a healthy meal in her bright brooklyn apartment.",
         ),
         negative_prompt: str = Input(
             description="Things you do not want to see in your image",
@@ -105,8 +107,14 @@ class Predictor(BasePredictor):
             ge=384,
             le=1536,
         ),
+        cfg: float = Input(
+            description="Classifier-Free Guidance scale in KSampler",
+            default=1.0,
+            ge=1.0,
+            le=20.0,
+        ),
         guidance: float = Input(
-            description="Flux Guidance scale",
+            description="Flux Guidance scale - controls how closely the image follows the prompt",
             default=3.5,
             ge=1.0,
             le=10.0,
@@ -117,7 +125,7 @@ class Predictor(BasePredictor):
                     "lms", "dpm_fast", "dpm_adaptive", "dpmpp_2s_ancestral", 
                     "dpmpp_sde", "dpmpp_sde_gpu", "dpmpp_2m", "dpmpp_2m_sde", 
                     "ddim", "uni_pc", "uni_pc_bh2"],
-            default="euler",
+            default="uni_pc",
         ),
         scheduler: str = Input(
             description="Scheduler to use for the diffusion process",
@@ -129,6 +137,18 @@ class Predictor(BasePredictor):
             default=30,
             ge=10,
             le=100,
+        ),
+        denoise: float = Input(
+            description="Denoising strength - lower values preserve more of the initial noise",
+            default=1.0,
+            ge=0.0,
+            le=1.0,
+        ),
+        lora_strength: float = Input(
+            description="Strength of the LoRA effect (applies to both model and CLIP)",
+            default=1.0,
+            ge=0.0,
+            le=2.0,
         ),
         batch_size: int = Input(
             description="Number of images to generate in a batch",
@@ -155,11 +175,14 @@ class Predictor(BasePredictor):
             negative_prompt=negative_prompt,
             width=width,
             height=height,
+            cfg=cfg,
             guidance=guidance,
             sampler=sampler,
             scheduler=scheduler,
             seed=seed,
             steps=steps,
+            denoise=denoise,
+            lora_strength=lora_strength,
             batch_size=batch_size
         )
 
