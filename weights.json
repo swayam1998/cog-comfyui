@@ -345,8 +345,7 @@
     "Ton618-Epic-Realism-Flux-LoRA.safetensors",
     "wan2.1-1.3b-control-lora-depth-v0.1_comfy.safetensors",
     "wan2.1-1.3b-control-lora-tile-v1.0_comfy.safetensors",
-    "weight_slider-LECO-v1.safetensors",
-    "0lgaFLUX-241129-120_LoRAex.safetensors"
+    "weight_slider-LECO-v1.safetensors"
   ],
   "EMBEDDINGS": [
     "bad_prompt_version2-neg.pt",

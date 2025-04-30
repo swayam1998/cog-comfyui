@@ -1,9 +1,9 @@
 {
   "5": {
     "inputs": {
-      "width": 1024,
-      "height": 1024,
-      "batch_size": 5
+      "width": 896,
+      "height": 1152,
+      "batch_size": 1
     },
     "class_type": "EmptyLatentImage",
     "_meta": {
@@ -12,7 +12,7 @@
   },
   "6": {
     "inputs": {
-      "text": "Portrait of ohwx woman with slicked back wet-look hair, and vibrant red eye makeup. She wears a black turtleneck. Against a dark background, the image evokes a stark, experimental aesthetic.",
+      "text": "EC$ style, a colorful digital illustration featuring a jumping strawberry character with yellow seeds and yellow limbs, on a lavender background. The character holds a vanilla soft-serve ice cream cone in one hand and flashes a peace with the other. The character has a playful facial expression, with round eyes, with long eyelashes, small pink lips. It has a big green leaf and stem on top of it's head. It wears blue sneakers with white laces, and white socks with pink stripes.",
       "clip": [
         "11",
         0
@@ -81,7 +81,7 @@
   },
   "16": {
     "inputs": {
-      "sampler_name": "uni_pc"
+      "sampler_name": "euler"
     },
     "class_type": "KSamplerSelect",
     "_meta": {
@@ -90,7 +90,7 @@
   },
   "17": {
     "inputs": {
-      "scheduler": "beta",
+      "scheduler": "normal",
       "steps": 30,
       "denoise": 1,
       "model": [
@@ -110,7 +110,7 @@
         0
       ],
       "conditioning": [
-        "6",
+        "58",
         0
       ]
     },
@@ -121,7 +121,7 @@
   },
   "25": {
     "inputs": {
-      "noise_seed": 196789725507062
+      "noise_seed": 705885565360461
     },
     "class_type": "RandomNoise",
     "_meta": {
@@ -173,82 +173,17 @@
       "title": "CLIP Text Encode (Prompt)"
     }
   },
-  "54": {
+  "58": {
     "inputs": {
-      "lora_name": "0lgaFLUX-241129-120_LoRAex.safetensors",
-      "strength_model": 1,
-      "strength_clip": 1,
-      "model": [
-        "39",
-        0
-      ],
-      "clip": [
-        "11",
-        0
-      ]
-    },
-    "class_type": "LoraLoader",
-    "_meta": {
-      "title": "Load LoRA"
-    }
-  },
-  "55": {
-    "inputs": {
-      "seed": 515806060606048,
-      "steps": 20,
-      "cfg": 8,
-      "sampler_name": "euler",
-      "scheduler": "normal",
-      "denoise": 1,
-      "model": [
-        "54",
-        0
-      ],
-      "positive": [
+      "guidance": 3.5,
+      "conditioning": [
         "6",
         0
-      ],
-      "negative": [
-        "53",
-        0
-      ],
-      "latent_image": [
-        "5",
-        0
       ]
     },
-    "class_type": "KSampler",
+    "class_type": "FluxGuidance",
     "_meta": {
-      "title": "KSampler"
-    }
-  },
-  "56": {
-    "inputs": {
-      "samples": [
-        "55",
-        0
-      ],
-      "vae": [
-        "49",
-        0
-      ]
-    },
-    "class_type": "VAEDecode",
-    "_meta": {
-      "title": "VAE Decode"
-    }
-  },
-  "57": {
-    "inputs": {
-      "filename_prefix": "ComfyUI",
-      "images": [
-        "56",
-        0
-      ]
-    },
-    "class_type": "SaveImage",
-    "_meta": {
-      "title": "Save Image"
+      "title": "FluxGuidance"
     }
   }
 }

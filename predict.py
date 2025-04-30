@@ -60,27 +60,56 @@ class Predictor(BasePredictor):
         negative_prompt = workflow["53"]["inputs"]
         negative_prompt["text"] = f"nsfw, {kwargs['negative_prompt']}"
         
-        # Update KSampler parameters in node 55
-        ksampler = workflow["55"]["inputs"]
-        ksampler["cfg"] = kwargs["cfg"]
-        ksampler["sampler_name"] = kwargs["sampler"]
-        ksampler["seed"] = kwargs["seed"]
-        ksampler["steps"] = kwargs["steps"]
+        # Update Empty Latent Image parameters in node 5
+        latent_image = workflow["5"]["inputs"]
+        latent_image["batch_size"] = kwargs["batch_size"]
+        latent_image["width"] = kwargs["width"]
+        latent_image["height"] = kwargs["height"]
+        
+        # Update RandomNoise seed in node 25
+        noise = workflow["25"]["inputs"]
+        noise["noise_seed"] = kwargs["seed"]
+        
+        # Update FluxGuidance in node 58
+        flux_guidance = workflow["58"]["inputs"]
+        flux_guidance["guidance"] = kwargs["guidance"]
+        
+        # Update sampler in node 16
+        sampler = workflow["16"]["inputs"]
+        sampler["sampler_name"] = kwargs["sampler"]
+        
+        # Update scheduler in node 17
+        scheduler = workflow["17"]["inputs"]
+        scheduler["steps"] = kwargs["steps"]
+        scheduler["scheduler"] = kwargs["scheduler"]
 
     def predict(
         self,
         prompt: str = Input(
-            default="",
+            description="Text prompt describing the image to generate",
+            default="EC$ style, a colorful digital illustration",
         ),
         negative_prompt: str = Input(
             description="Things you do not want to see in your image",
             default="",
         ),
-        cfg: float = Input(
-            description="Classifier-Free Guidance scale - how strongly the image should conform to the prompt",
-            default=8.0,
+        width: int = Input(
+            description="Width of the generated image",
+            default=896,
+            ge=384,
+            le=1536,
+        ),
+        height: int = Input(
+            description="Height of the generated image",
+            default=1152,
+            ge=384,
+            le=1536,
+        ),
+        guidance: float = Input(
+            description="Flux Guidance scale",
+            default=3.5,
             ge=1.0,
-            le=20.0,
+            le=10.0,
         ),
         sampler: str = Input(
             description="Which sampler to use for the diffusion process",
@@ -90,11 +119,22 @@ class Predictor(BasePredictor):
                     "ddim", "uni_pc", "uni_pc_bh2"],
             default="euler",
         ),
+        scheduler: str = Input(
+            description="Scheduler to use for the diffusion process",
+            choices=["normal", "karras", "exponential", "sgm_uniform", "simple", "ddim_uniform"],
+            default="normal",
+        ),
         steps: int = Input(
             description="Number of diffusion steps to run",
-            default=20,
+            default=30,
             ge=10,
             le=100,
+        ),
+        batch_size: int = Input(
+            description="Number of images to generate in a batch",
+            default=1,
+            ge=1,
+            le=8,
         ),
         output_format: str = optimise_images.predict_output_format(),
         output_quality: int = optimise_images.predict_output_quality(),
@@ -113,10 +153,14 @@ class Predictor(BasePredictor):
             workflow,
             prompt=prompt,
             negative_prompt=negative_prompt,
-            cfg=cfg,
+            width=width,
+            height=height,
+            guidance=guidance,
             sampler=sampler,
+            scheduler=scheduler,
             seed=seed,
-            steps=steps
+            steps=steps,
+            batch_size=batch_size
         )
 
         wf = self.comfyUI.load_workflow(workflow)
